@@ -2,7 +2,6 @@ pipeline {
     agent any
 
     environment {
-        // change these if your folder names are different
         BACKEND_DIR  = "backend"
         FRONTEND_DIR = "frontend"
     }
@@ -22,53 +21,62 @@ pipeline {
             }
         }
 
-        stage('Backend – build/test (placeholder)') {
+        stage('Backend – npm install & test') {
             when {
-                expression { fileExists("${env.BACKEND_DIR}") }
+                expression { 
+                    fileExists("${env.BACKEND_DIR}") && 
+                    fileExists("${env.BACKEND_DIR}/package.json")
+                }
             }
             steps {
-                echo "📦 Backend folder found at: ${env.BACKEND_DIR}"
-                echo "👉 Here you will run backend build commands."
-
-                // EXAMPLES (pick the one that matches your tech stack later):
-                // Node/Express:
-                // sh "cd ${env.BACKEND_DIR} && npm install && npm test"
-
-                // Java + Maven:
-                // sh "cd ${env.BACKEND_DIR} && mvn clean package"
-
-                // Python:
-                // sh "cd ${env.BACKEND_DIR} && pip install -r requirements.txt && pytest"
-
-                sh "cd ${env.BACKEND_DIR} && ls"   // harmless, just to prove it runs
+                echo "📦 Backend detected at ${env.BACKEND_DIR} (package.json present)"
+                dir(env.BACKEND_DIR) {
+                    sh 'npm install'
+                    // if you have tests:
+                    // sh "npm test"
+                }
             }
         }
 
-        stage('Frontend – build (placeholder)') {
+        stage('Frontend – npm install & build') {
             when {
-                expression { fileExists("${env.FRONTEND_DIR}") }
+                expression { 
+                    fileExists("${env.FRONTEND_DIR}") && 
+                    fileExists("${env.FRONTEND_DIR}/package.json")
+                }
             }
             steps {
-                echo "🎨 Frontend folder found at: ${env.FRONTEND_DIR}"
-                echo "👉 Here you will run frontend build commands."
+                echo "🎨 Frontend detected at ${env.FRONTEND_DIR} (package.json present)"
+                dir(env.FRONTEND_DIR) {
+                    sh 'npm install'
+                    // React/Vite/etc:
+                    sh 'npm run build'
+                }
+            }
+        }
 
-                // For React / Vite / etc. later you can do:
-                // sh "cd ${env.FRONTEND_DIR} && npm install && npm run build"
-
-                sh "cd ${env.FRONTEND_DIR} && ls"  // harmless for now
+        stage('Docker – build & compose up') {
+            when {
+                expression { fileExists('docker-compose.yml') }
+            }
+            steps {
+                echo "🐳 docker-compose.yml found – running docker compose"
+                // These will work if Jenkins container has docker CLI + /var/run/docker.sock mounted
+                sh 'docker compose down || true'
+                sh 'docker compose up -d --build'
             }
         }
     }
 
     post {
         always {
-            echo "🏁 Pipeline finished (success or failure)"
+            echo "🏁 EMS pipeline finished (success or failure)"
         }
         success {
-            echo "🎉 EMS pipeline finished successfully"
+            echo "🎉 EMS build & (optional) docker deploy succeeded"
         }
         failure {
-            echo "❌ EMS pipeline failed – check logs"
+            echo "❌ EMS pipeline failed – check the stage that broke above"
         }
     }
 }

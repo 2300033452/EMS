@@ -2,11 +2,11 @@
   "name": "employee-management-system-frontend",
   "displayName": "Employee Management System Frontend",
   "version": "1.1.0",
-  "author": "Son Nguyen",
+  "author": "Sunidhi Gudapati",
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/hoangsonww/Employee-Management-Fullstack-App.git"
+    "url": "git+https://github.com/2300033452/EMS.git"
   },
   "bugs": {
     "url": "https://github.com/hoangsonww/Employee-Management-Fullstack-App/issues"

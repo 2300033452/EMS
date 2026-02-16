@@ -967,14 +967,9 @@ This project is licensed under the **MIT License.** See the [LICENSE](LICENSE) f
 
 ## Contact
 
-For any questions or issues, please contact [hoangson091104@gmail.com](mailto:hoangson091104@gmail.com).
+For any questions or issues, please contact sunig0805@gmail.com.
 
----
+Created by Sunidhi Gudapati in 2025.
 
-Thank you for checking out the **Employee Management Full-Stack Application!** Feel free to use this project for your own learning or development purposes.
-
-Created with ❤️ by [Son Nguyen](https://github.com/hoangsonww) in 2024.
-
----
 
 **[⬆ Back to Top](#employee-management-full-stack-application)**
